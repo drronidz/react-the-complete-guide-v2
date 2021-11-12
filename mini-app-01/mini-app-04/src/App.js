@@ -25,16 +25,19 @@ function App() {
 
             const data = await response.json()
 
-            const transformedMovies = data.results.map(movieDATA => {
-                return {
-                    id: movieDATA.episode_id,
-                    title: movieDATA.title,
-                    openingText: movieDATA.opening_crawl,
-                    releaseDate: movieDATA.release_date
-                }
-            })
+            const loadedMovies = []
 
-            setMovies(transformedMovies)
+            for(const key in data) {
+                loadedMovies.push({
+                    id: key,
+                    title: data[key].title,
+                    openingText: data[key].openingText,
+                    releaseDate: data[key].releaseDate,
+                })
+            }
+            console.log(data)
+
+            setMovies(loadedMovies)
         } catch (error) {
             setError(error.message)
         }
@@ -45,6 +48,20 @@ function App() {
     useEffect(() => {
         fetchMovieHandler()
     }, [fetchMovieHandler])
+
+    async function addMovieHandler(movie) {
+        const response = await fetch('https://react-http-fe1b6-default-rtdb.firebaseio.com/movies.json', {
+            method: 'POST',
+            body: JSON.stringify(movie),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+
+        const data = response.json()
+        console.log(data)
+
+    }
 
     let content = <p>Found no movies.</p>
 
@@ -62,7 +79,7 @@ function App() {
 
     return (
         <React.Fragment>
-            <section><AddMovie/></section>
+            <section><AddMovie onAddMovie={addMovieHandler}/></section>
             <section>
                 <button onClick={fetchMovieHandler}>Fetch Movies</button>
             </section>
