@@ -1,72 +1,87 @@
-import uiSlice from "./ui-slice";
 import cartSlice from "./cart-slice";
+import uiSlice from "./ui-slice";
 
 export const fetchCartDATA = () => {
-    return async dispatch => {
-        const fetchDATA = async () => {
-            const response = await fetch('https://react-http-fe1b6-default-rtdb.firebaseio.com/cart.json')
+    return async (dispatch) => {
+        const fetchData = async () => {
+            const response = await fetch(
+                'https://react-http-fe1b6-default-rtdb.firebaseio.com/cart.json'
+            );
 
             if (!response.ok) {
-                throw new Error('Could not fetch cart DATA!')
+                throw new Error('Could not fetch cart data!');
             }
-            return response.json;
-        }
+
+            const DATA = await response.json();
+
+            return DATA;
+        };
 
         try {
-            const cartDATA = await fetchDATA()
-            dispatch(cartSlice.actions.replaceCart(cartDATA))
-        }
-        catch (error) {
+            const cartData = await fetchData();
+            dispatch(
+                cartSlice.actions.replaceCart({
+                    items: cartData.items || [],
+                    totalQuantity: cartData.totalQuantity,
+                })
+            );
+        } catch (error) {
             dispatch(
                 uiSlice.actions.showNotification({
                     status: 'error',
                     title: 'Error!',
-                    message: 'Sending cart DATA failed!'
+                    message: 'Fetching cart data failed!',
                 })
-            )
+            );
         }
+    };
+};
 
-
-    }
-}
-
-export const sendCartDATA = (cartDATA) => {
+export const sendCartDATA = (cart) => {
     return async (dispatch) => {
-        dispatch(uiSlice.actions.showNotification({
-            status: 'pending',
-            title: 'Sending ...',
-            message: 'Sending Cart DATA!'
-        }))
+        dispatch(
+            uiSlice.actions.showNotification({
+                status: 'pending',
+                title: 'Sending...',
+                message: 'Sending cart data!',
+            })
+        );
 
         const sendRequest = async () => {
-            const response = await fetch('https://react-http-fe1b6-default-rtdb.firebaseio.com/cart.json', {
-                method: 'PUT',
-                body: JSON.stringify(cartDATA)
-            })
+            const response = await fetch(
+                'https://react-http-fe1b6-default-rtdb.firebaseio.com/cart.json',
+                {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        items: cart.items,
+                        totalQuantity: cart.totalQuantity,
+                    }),
+                }
+            );
 
             if (!response.ok) {
-                throw new Error('Sending cart DATA failed.')
+                throw new Error('Sending cart data failed.');
             }
-        }
+        };
 
         try {
-            await sendRequest()
+            await sendRequest();
 
-            dispatch(uiSlice.actions.showNotification({
-                status: 'success',
-                title: 'Success!',
-                message: 'Cart DATA sent successfully!'
-            }))
-
-        }
-        catch (error) {
+            dispatch(
+                uiSlice.actions.showNotification({
+                    status: 'success',
+                    title: 'Success!',
+                    message: 'Sent cart data successfully!',
+                })
+            );
+        } catch (error) {
             dispatch(
                 uiSlice.actions.showNotification({
                     status: 'error',
                     title: 'Error!',
-                    message: 'Sending cart DATA failed!'
+                    message: 'Sending cart data failed!',
                 })
-            )
+            );
         }
-    }
-}
+    };
+};
