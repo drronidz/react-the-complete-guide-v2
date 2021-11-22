@@ -12,8 +12,8 @@ function App() {
             <main>
                 <Routes>
                     <Route path="/welcome" element={ <Welcome/> } />
-                    <Route path="/products" element={ <Products/> } />
-                    <Route path="/product-detail/:productId" element={ <ProductDetail/> } />
+                    <Route path="/products" exact element={ <Products/> } />
+                    <Route path="/products/:productId" element={ <ProductDetail/> } />
                 </Routes>
             </main>
         </div>
