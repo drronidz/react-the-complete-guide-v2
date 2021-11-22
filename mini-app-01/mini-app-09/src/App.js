@@ -11,7 +11,9 @@ function App() {
             <MainHeader/>
             <main>
                 <Routes>
-                    <Route path="/welcome" element={ <Welcome/> } />
+                    <Route path="/welcome" element={ <Welcome/> }>
+                        <Route path=":new-user" exact element={ <Welcome/> } />
+                    </Route>
                     <Route path="/products" exact element={ <Products/> } />
                     <Route path="/products/:productId" element={ <ProductDetail/> } />
                 </Routes>
