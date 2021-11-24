@@ -4,6 +4,7 @@ import Products from "./Pages/Products";
 import MainHeader from "./components/MainHeader";
 import ProductDetail from "./Pages/ProductDetail";
 import Switch from "react-router-dom/es/Switch";
+import Redirect from "react-router-dom/es/Redirect";
 
 function App() {
     return (
@@ -11,6 +12,9 @@ function App() {
             <MainHeader/>
             <main>
                 <Switch>
+                    <Route path="/" exact>
+                        <Redirect to="/welcome"/>
+                    </Route>
                     <Route path="/welcome">
                         <Welcome/>
                     </Route>
