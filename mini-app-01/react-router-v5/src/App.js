@@ -12,7 +12,7 @@ function App() {
                 <Route path="/welcome">
                     <Welcome/>
                 </Route>
-                <Route path="/products">
+                <Route path="/pr oducts">
                     <Products/>
                 </Route>
                 <Route path="/product-detail/:productId">
